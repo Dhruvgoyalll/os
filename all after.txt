@@ -1,0 +1,571 @@
+Q7. WAP to implement SHORTEST JOB FIRST SCHEDULING ALGO. Calculate the average turnaround time and average waiting time and average response time.
+
+#include <stdio.h> 
+int main() 
+{ 
+int arrival_time[10], burst_time[10], temp[10]; 
+int i, smallest, count = 0, time, limit; 
+double wait_time = 0, turnaround_time = 0, end; 
+float average_waiting_time, average_turnaround_time; 
+printf("\n Enter the Total Number of Processes:\t"); 
+scanf("%d", &limit); 
+printf("\n Enter Details of %d Processes \n", limit); 
+for(i = 0; i < limit; i++) 
+{ 
+printf("\n Enter Arrival Time:\t"); 
+scanf("%d", &arrival_time[i]); 
+printf("Enter Burst Time:\t"); 
+scanf("%d", &burst_time[i]); 
+temp[i] = burst_time[i]; 
+} 
+burst_time[9] = 9999; 
+for(time = 0; count != limit; time++) 
+{ 
+smallest = 9; 
+for(i = 0; i < limit; i++) 
+{ 
+if(arrival_time[i] <= time && burst_time[i] < burst_time[smallest] && burst_time[i] > 0) 
+{ 
+smallest = i; 
+} 
+} 
+burst_time[smallest]--; 
+if(burst_time[smallest] == 0) 
+{ 
+count++; 
+end = time + 1; 
+wait_time = wait_time + end - arrival_time[smallest] - temp[smallest]; 
+turnaround_time = turnaround_time + end - arrival_time[smallest]; 
+} 
+} 
+average_waiting_time = wait_time / limit; 
+average_turnaround_time = turnaround_time / limit; 
+printf("\n\n\n Average Waiting Time:\t%lf\n", average_waiting_time); 
+printf("Average Turnaround Time:\t%lf\n", average_turnaround_time); 
+return 0; 
+} 
+                                                            OUTPUT
+ 
+ 
+
+Q8. WAP to implement PRIORITY SCHEDULING ALGO. Calculate the average turnaround time and average waiting time and average response time.
+
+#include<stdio.h> 
+int main() { 
+int x,n,p[10],pp[10],pt[10],w[10],t[10],awt,atat,i,j; 
+printf("Enter the number of process : "); 
+scanf("%d",&n); 
+printf("\n Enter process : time priorities \n"); 
+for(i=0;i<n;i++) 
+{ 
+printf("\nProcess no %d : ",i+1); 
+scanf("%d %d",&pt[i],&pp[i]); 
+p[i]=i+1; 
+} 
+for(i=0;i<n-1;i++){ 
+for(j=i+1;j<n;j++) 
+{ 
+if(pp[i]<pp[j]) 
+{ 
+x=pp[i]; 
+pp[i]=pp[j]; 
+pp[j]=x; 
+x=pt[i]; 
+pt[i]=pt[j]; 
+pt[j]=x; 
+x=p[i]; 
+p[i]=p[j]; 
+p[j]=x; 
+} 
+} 
+} 
+w[0]=0; 
+awt=0; 
+t[0]=pt[0]; 
+atat=t[0]; 
+for(i=1;i<n;i++) 
+{ 
+w[i]=t[i-1]; 
+awt+=w[i]; 
+t[i]=w[i]+pt[i]; 
+atat+=t[i]; 
+} 
+printf("\n\n Job \t Burst Time \t Wait Time \t Turn Around Time Priority \n"); 
+for(i=0;i<n;i++) 
+printf("\n %d \t\t %d \t\t %d \t\t %d \t\t %d \n",p[i],pt[i],w[i],t[i],pp[i]); 
+awt/=n; 
+atat/=n; 
+printf("\n Average Wait Time : %d \n",awt); 
+printf("\n Average Turn Around Time : %d \n",atat); 
+return 0; 
+} 
+                                                    OUTPUT
+ 
+ 
+
+ Q9.Implementation of ROUND ROBIN SCHEDULING ALGORITHM. Calculate the average turnaround time and average waiting time and average response time.
+
+#include<stdio.h> 
+int main() 
+{ 
+int cnt,j,n,t,remain,flag=0,tq; 
+int wt=0,tat=0,at[10],bt[10],rt[10]; 
+printf("Enter Total Process:\t "); 
+scanf("%d",&n); 
+remain=n; 
+for(cnt=0;cnt<n;cnt++) 
+{ 
+printf("Enter Arrival Time and Burst Time for Process Process Number %d :",cnt+1); 
+scanf("%d",&at[cnt]); 
+scanf("%d",&bt[cnt]); 
+rt[cnt]=bt[cnt]; 
+} 
+printf("Enter Time Quantum:\t"); 
+scanf("%d",&tq); 
+printf("\n\nProcess\t|Turnaround Time|Waiting Time\n\n"); 
+for(t=0,cnt=0;remain!=0;) 
+{ 
+if(rt[cnt]<=tq && rt[cnt]>0) 
+{ 
+t+=rt[cnt]; 
+rt[cnt]=0; 
+flag=1; 
+} 
+else if(rt[cnt]>0) 
+{ 
+rt[cnt]-=tq; 
+t+=tq; 
+} 
+if(rt[cnt]==0 && flag==1) 
+{ 
+remain--; 
+printf("P[%d]\t|\t%d\t|\t%d\n",cnt+1,t-at[cnt],t-at[cnt]-bt[cnt]); 
+wt+=t-at[cnt]-bt[cnt]; 
+tat+=t-at[cnt]; 
+flag=0; 
+} 
+if(cnt==n-1) 
+cnt=0; 
+else if(at[cnt+1]<=t) 
+cnt++; 
+else 
+cnt=0; 
+} 
+printf("\nAverage Waiting Time= %f\n",wt*1.0/n); 
+printf("Avg Turnaround Time = %f",tat*1.0/n); 
+return 0; 
+} 
+                                                      OUTPUT
+ 
+ 
+
+Q10. Implementation of SHORTEST REMAINING TIME FIRST ALGORITHM. Calculate the average turnaround time and average waiting time and average response time.
+
+#include <stdio.h> 
+int main() 
+{ 
+int a[10],b[10],x[10],i,j,smallest,count=0,time,n; 
+double avg=0,tt=0,end; 
+printf("enter the number of Processes:\n"); 
+scanf("%d",&n); 
+printf("enter arrival time\n"); 
+for(i=0;i<n;i++) 
+scanf("%d",&a[i]); 
+printf("enter burst time\n"); 
+for(i=0;i<n;i++) 
+scanf("%d",&b[i]); 
+for(i=0;i<n;i++) 
+x[i]=b[i]; 
+b[9]=9999; 
+for(time=0;count!=n;time++) 
+{ 
+smallest=9; 
+for(i=0;i<n;i++) 
+{ 
+if(a[i]<=time && b[i]<b[smallest] && b[i]>0 ) 
+smallest=i; 
+} 
+b[smallest]--; 
+if(b[smallest]==0) 
+{ 
+count++; 
+end=time+1; 
+avg=avg+end-a[smallest]-x[smallest]; 
+tt= tt+end-a[smallest]; 
+} 
+} 
+printf("\n\nAverage waiting time = %lf\n",avg/n); 
+printf("Average Turnaround time = %lf",tt/n); 
+return 0; 
+} 
+                                                          OUTPUT
+ 
+ 
+
+Q11. Implementation of OPTIMAL PAGE REPLACEMENT POLICY. Calculate the number of misses for a given sequence of page numbers. (sequence and frame number will be given by user). 
+
+#include<stdio.h> 
+int fr[3], n, m; 
+void display(); 
+int main() 
+{ 
+int i,j,page[20],fs[10]; 
+int max,found=0,lg[3],index,k,l,flag1=0,flag2=0,pf=0; 
+float pr; 
+printf("Enter length of the reference string: "); 
+scanf("%d",&n); 
+printf("Enter the reference string: "); 
+for(i=0;i<n;i++) 
+scanf("%d",&page[i]); 
+printf("Enter no of frames: "); 
+scanf("%d",&m); 
+for(i=0;i<m;i++) 
+fr[i]=-1; 
+pf=m; 
+for(j=0;j<n;j++) 
+{ 
+flag1=0; 
+flag2=0; 
+for(i=0;i<m;i++) 
+{ 
+if(fr[i]==page[j]) 
+{ 
+flag1=1; 
+flag2=1; 
+break; 
+} 
+} 
+if(flag1==0) 
+{ 
+for(i=0;i<m;i++) 
+{ 
+if(fr[i]==-1) 
+{ 
+fr[i]=page[j]; 
+flag2=1; 
+break; 
+} 
+} 
+} 
+if(flag2==0) 
+{ 
+for(i=0;i<m;i++) 
+lg[i]=0; 
+for(i=0;i<m;i++) 
+{ 
+for(k=j+1;k<=n;k++) 
+{ 
+if(fr[i]==page[k]) 
+{ 
+lg[i]=k-j; 
+break; 
+} 
+} 
+} 
+found=0; 
+for(i=0;i<m;i++) 
+{ 
+if(lg[i]==0) 
+{ 
+index=i; 
+found = 1; 
+break; 
+} 
+} 
+if(found==0) 
+{ 
+max=lg[0]; index=0; 
+for(i=0;i<m;i++) 
+{ 
+if(max<lg[i]) 
+{ 
+max=lg[i]; 
+index=i; 
+} 
+} 
+} 
+fr[index]=page[j]; 
+pf++; 
+} 
+display(); 
+} 
+printf("Number of page faults : %d\n", pf); 
+pr=(float)pf/n*100; 
+printf("Page fault rate = %f \n", pr); 
+return 0; 
+} 
+void display() 
+{ 
+int i; for(i=0;i<m;i++) 
+printf("%d\t",fr[i]); 
+printf("\n"); 
+} 
+                                         OUTPUT 
+  
+
+ Q12.Implementation of LRU PAGE REPLECMENT POLICY. Calculate the number of misses for a given sequence of page numbers. (sequence and frame number will be given by user).
+
+#include<stdio.h> 
+int findLRU(int time[], int n){ 
+int i, minimum = time[0], pos = 0; 
+for(i = 1; i < n; ++i){ 
+if(time[i] < minimum){ 
+minimum = time[i]; 
+pos = i; 
+} 
+} 
+return pos; 
+} 
+int main() 
+{ 
+int no_of_frames, no_of_pages, frames[10], pages[30], counter = 0, time[10], flag1, flag2, i, j, pos, faults = 0; 
+printf("Enter number of frames: "); 
+scanf("%d", &no_of_frames); 
+printf("Enter number of pages: "); 
+scanf("%d", &no_of_pages); 
+printf("Enter reference string: "); 
+for(i = 0; i < no_of_pages; ++i){ 
+scanf("%d", &pages[i]); 
+} 
+for(i = 0; i < no_of_frames; ++i){ 
+frames[i] = -1; 
+} 
+for(i = 0; i < no_of_pages; ++i){ 
+flag1 = flag2 = 0; 
+for(j = 0; j < no_of_frames; ++j){ 
+if(frames[j] == pages[i]){ 
+counter++; 
+time[j] = counter; 
+flag1 = flag2 = 1; 
+break; } } 
+if(flag1 == 0){ 
+for(j = 0; j < no_of_frames; ++j){ 
+if(frames[j] == -1){ 
+counter++; 
+faults++; 
+frames[j] = pages[i]; 
+time[j] = counter; 
+flag2 = 1; 
+break; } } } 
+if(flag2 == 0){ 
+pos = findLRU(time, no_of_frames); 
+counter++; 
+faults++; 
+frames[pos] = pages[i]; 
+time[pos] = counter; } 
+printf("\n"); 
+for(j = 0; j < no_of_frames; ++j){ 
+printf("%d\t", frames[j]); 
+} 
+} 
+printf("\n\nTotal Page Faults = %d", faults); 
+return 0; 
+} 
+                                              OUTPUT
+ 
+
+Q13. WAP to implement FCFS disk scheduling algorithm. Calculate the total seek time. 
+#include<math.h> 
+#include<stdio.h> 
+#include<stdlib.h> 
+int main() 
+{ 
+int i,n,req[50],mov=0,cp; 
+printf("enter the current position\n"); 
+scanf("%d",&cp); 
+printf("enter the number of requests\n"); 
+scanf("%d",&n); 
+printf("enter the request order\n"); 
+for(i=0;i<n;i++) 
+{ 
+scanf("%d",&req[i]); 
+} 
+mov=mov+abs(cp-req[0]); // abs is used to calculate the absolute value 
+printf("%d -> %d",cp,req[0]); 
+for(i=1;i<n;i++) 
+{ 
+mov=mov+abs(req[i]-req[i-1]); 
+printf(" -> %d",req[i]); 
+} 
+printf("\n"); 
+printf("total head movement = %d\n",mov); 
+} 
+                                                OUTPUT 
+  
+
+Q14. WAP to implement Scan and C-scan disk scheduling algorithm. Calculate the total seek time
+#include <stdio.h>
+#include <stdlib.h>
+// Function to perform the Scan disk scheduling algorithm
+void scan(int arr[], int head, int size) {
+    int distance, total_seek_time = 0;
+    int current = head;
+    // Sorting the array to simplify the scan algorithm
+    qsort(arr, size, sizeof(int), compare);
+
+    // Finding the index of the head
+    int index = 0;
+    while (arr[index] < head) {
+        index++;
+    }
+
+    // Moving towards the end
+    for (int i = index; i < size; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    // Moving towards the beginning
+    for (int i = index - 1; i >= 0; i--) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current + distance, current, distance);
+    }
+
+    printf("Total Seek Time: %d\n", total_seek_time);
+}
+
+// Function to perform the C-Scan disk scheduling algorithm
+void cscan(int arr[], int head, int size) {
+    int distance, total_seek_time = 0;
+    int current = head;
+
+    // Sorting the array to simplify the cscan algorithm
+    qsort(arr, size, sizeof(int), compare);
+
+    // Finding the index of the head
+    int index = 0;
+    while (arr[index] < head) {
+        index++;
+    }
+
+    // Moving towards the end
+    for (int i = index; i < size; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    // Moving to the beginning (circular)
+    distance = abs(arr[0] - current) + abs(arr[size - 1] - arr[0]);
+    total_seek_time += distance;
+    current = arr[0];
+    printf("Move from %d to %d with seek %d\n", current + distance, current, distance);
+
+    // Moving towards the end again
+    for (int i = 1; i < index; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+    printf("Total Seek Time: %d\n", total_seek_time);
+}
+// Function to compare integers for qsort
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+int main() {
+    int cylinders[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    int size = sizeof(cylinders) / sizeof(cylinders[0]);
+    printf("Scan Algorithm:\n");
+    scan(cylinders, 50, size);
+    printf("\nC-Scan Algorithm:\n");
+    cscan(cylinders, 50, size);
+    return 0;
+}
+                                                    OUTPUT
+
+ 
+ Q15. WAP to implement Look and C-look disk scheduling algorithm. Calculate the total seek time.
+#include <stdio.h>
+#include <stdlib.h>
+
+// Function to perform the Look disk scheduling algorithm
+void look(int arr[], int head, int size) {
+    int distance, total_seek_time = 0;
+    int current = head;
+
+    // Sorting the array to simplify the look algorithm
+    qsort(arr, size, sizeof(int), compare);
+
+    // Finding the index of the head
+    int index = 0;
+    while (arr[index] < head) {
+        index++;
+    }
+
+    // Moving towards the end
+    for (int i = index; i < size; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    // Moving towards the beginning
+    for (int i = index - 1; i >= 0; i--) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    printf("Total Seek Time: %d\n", total_seek_time);
+}
+
+// Function to perform the C-Look disk scheduling algorithm
+void clook(int arr[], int head, int size) {
+    int distance, total_seek_time = 0;
+    int current = head;
+
+    // Sorting the array to simplify the clook algorithm
+    qsort(arr, size, sizeof(int), compare);
+
+    // Finding the index of the head
+    int index = 0;
+    while (arr[index] < head) {
+        index++;
+    }
+
+    // Moving towards the end
+    for (int i = index; i < size; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    // Moving towards the beginning (circular)
+    for (int i = 0; i < index; i++) {
+        distance = abs(arr[i] - current);
+        total_seek_time += distance;
+        current = arr[i];
+        printf("Move from %d to %d with seek %d\n", current - distance, current, distance);
+    }
+
+    printf("Total Seek Time: %d\n", total_seek_time);
+}
+
+// Function to compare integers for qsort
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+int main() {
+    int cylinders[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    int size = sizeof(cylinders) / sizeof(cylinders[0]);
+
+    printf("Look Algorithm:\n");
+    look(cylinders, 50, size);
+
+    printf("\nC-Look Algorithm:\n");
+    clook(cylinders, 50, size);
+
+    return 0;
+}
